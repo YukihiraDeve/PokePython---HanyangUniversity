@@ -6,7 +6,6 @@
 #Variable Globale
 
 
-from nis import cat
 
 
 team = 0
@@ -17,9 +16,12 @@ MIN_POKEMON_TEAM = 1
 global Player
 
 
+
+
 def initGame():
     InitPokedex()
-    main()
+    Player = main()
+    MovePlayer(Player)
 
 
 
@@ -40,12 +42,16 @@ def main():
     if choise == "1" :
         Starter = Pokedex[1]
         print("Vous avez choisis", Starter.name)
+    if choise == "2":
+        Starter = Pokedex[4]
+    if choise == "3":
+        Starter = Pokedex[7]
+    PositionX = 5
+    PositionY = 5
+    Player = Dresseur(name, sexe, Starter, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6, PositionX, PositionY)
 
-    Player = Dresseur(name, sexe, Starter, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6)
+    return Player
 
-    print("Enjoy", Player.name, Player.Pokemon1)
-
-    Menu(Player)
 
 #Pokemon class
 class Pokemon():
@@ -70,6 +76,7 @@ def InitPokedex():
     Carapuce  = Pokemon("Carapuce", 5, "Water", 100, 7)
     Carabaffe = Pokemon("Carabaffe", 5, "Water", 100, 8)
     Tortank   = Pokemon("Tortank", 5, "Water", 100, 9)
+
     Pokedex.append(Any)
     Pokedex.append(Bulbizare)
     Pokedex.append(Herbizare)
@@ -82,8 +89,11 @@ def InitPokedex():
     Pokedex.append(Tortank)
 
 
+
+
+
 class Dresseur:
-    def __init__(self, name, sexe, Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6):
+    def __init__(self, name, sexe, Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6, PositionX, PositionY):
         self.name = name
         self.sexe = sexe
         self.Pokemon1 = Pokemon1
@@ -92,6 +102,9 @@ class Dresseur:
         self.Pokemon4 = Pokemon4
         self.Pokemon5 = Pokemon5
         self.Pokemon6 = Pokemon6
+        self.PositionX = PositionX
+        self.PositionY = PositionY
+
 
     def TeamPokemon(self):
         print("1.", self.Pokemon1.name)
@@ -106,6 +119,18 @@ class Dresseur:
                 break
             except ValueError:
                 print("Error team")
+
+    def PlayerInfo(self):
+        print("Name :", self.name
+                , "Sexe :", self.sexe
+                , "Pokemon1 :", self.Pokemon1.name
+                , "Pokemon2 :", self.Pokemon2.name
+                , "Pokemon3 :", self.Pokemon3.name
+                , "Pokemon4 :", self.Pokemon4.name
+                , "Pokemon5 :", self.Pokemon5.name
+                , "Pokemon6 :", self.Pokemon6.name)
+        pass
+
 
 
 
@@ -123,14 +148,43 @@ def Menu(Player):
     print("Menu")
     print("1 - Pokedex")
     print("2 - Team")
-    print("3 - Exit")
+    print("3 - Info Player")
+    print("4 - Exit")
     choice = input("Choice : ")
     if choice == "1":
         PokedexDisplay()
     elif choice == "2":
         Player.TeamPokemon()
     elif choice == "3":
-        exit()
+        Player.PlayerInfo()
+
+
+def MovePlayer(Player):
+    print("Move")
+    print("1 - Z")
+    print("2 - S")
+    print("3 - Q")
+    print("4 - D")
+    print("5 - Menu")
+    choice = input("Choice : ")
+    if choice == "Z":
+        Player.PositionY = Player.PositionY + 1
+        print(Player.PositionY)
+        MovePlayer(Player)
+    elif choice == "S":
+        print("Down")
+        Player.PositionY = Player.PositionY - 1
+        MovePlayer(Player)
+    elif choice == "Q":
+        print("Left")
+        Player.PositionX = Player.PositionX - 1
+        MovePlayer(Player)
+    elif choice == "D":
+        print("Right")
+        Player.PositionX = Player.PositionX + 1
+        MovePlayer(Player)
+    elif choice == "5":
+        Menu(Player)
 
 
 
