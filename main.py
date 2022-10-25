@@ -5,9 +5,6 @@
 
 #Variable Globale
 
-
-
-
 team = 0
 Pokedex = []
 PokemonTeam = []
@@ -106,7 +103,7 @@ class Dresseur:
         self.PositionY = PositionY
 
 
-    def TeamPokemon(self):
+    def TeamPokemon(self, Player):
         print("1.", self.Pokemon1.name)
         while True:
             try:
@@ -119,8 +116,9 @@ class Dresseur:
                 break
             except ValueError:
                 print("Error team")
+        Menu(Player)
 
-    def PlayerInfo(self):
+    def PlayerInfo(self, Player):
         print("Name :", self.name
                 , "Sexe :", self.sexe
                 , "Pokemon1 :", self.Pokemon1.name
@@ -129,17 +127,17 @@ class Dresseur:
                 , "Pokemon4 :", self.Pokemon4.name
                 , "Pokemon5 :", self.Pokemon5.name
                 , "Pokemon6 :", self.Pokemon6.name)
-        pass
+        Menu(Player)
 
 
 
 
 #Affichage Pokedex
-def PokedexDisplay():
+def PokedexDisplay(Player):
     print("Pokedex")
     for pokemon in Pokedex:
         print(pokemon.id,".", pokemon.name, pokemon.type)
-    Menu()
+    Menu(Player)
 
 
 #Menu init
@@ -152,11 +150,13 @@ def Menu(Player):
     print("4 - Exit")
     choice = input("Choice : ")
     if choice == "1":
-        PokedexDisplay()
+        PokedexDisplay(Player)
     elif choice == "2":
-        Player.TeamPokemon()
+        Player.TeamPokemon(Player)
     elif choice == "3":
-        Player.PlayerInfo()
+        Player.PlayerInfo(Player)
+    elif choice == "4":
+        MovePlayer(Player)
 
 
 def MovePlayer(Player):
@@ -168,24 +168,58 @@ def MovePlayer(Player):
     print("5 - Menu")
     choice = input("Choice : ")
     if choice == "Z":
+        print("North")
         Player.PositionY = Player.PositionY + 1
         print(Player.PositionY)
-        MovePlayer(Player)
+        MapPose(Player)
     elif choice == "S":
-        print("Down")
+        print("South")
         Player.PositionY = Player.PositionY - 1
-        MovePlayer(Player)
+        MapPose(Player)
     elif choice == "Q":
-        print("Left")
+        print("West")
         Player.PositionX = Player.PositionX - 1
-        MovePlayer(Player)
+        MapPose(Player)
     elif choice == "D":
-        print("Right")
+        print("East")
         Player.PositionX = Player.PositionX + 1
-        MovePlayer(Player)
+        MapPose(Player)
     elif choice == "5":
         Menu(Player)
 
+
+
+def MapPose(Player):
+    print("Map")
+    print("X", Player.PositionX, "Y", Player.PositionY)
+    if Player.PositionX % 5 == 1 :
+        print("=----- DUEL -----=")
+        fight(Player)
+    else : 
+        MovePlayer(Player)
+
+
+
+class Fight:
+    def __init__(self, Player, Openent):
+        self.Player = Player
+        self.Openent = Openent
+        
+    def Setup(self):
+        print("Fight")
+        print("1 - Attack")
+        print("2 - Item")
+        print("3 - Run")
+        choice = input("Choice : ")
+        if choice == "1":
+            print("Attack")
+        elif choice == "2":
+            print("Item")
+        elif choice == "3":
+            print("Run")
+        else:
+            print("Error")
+            self.Setup()
 
 
 
