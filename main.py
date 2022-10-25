@@ -5,6 +5,9 @@
 
 #Variable Globale
 
+from typing import Set
+
+
 team = 0
 Pokedex = []
 PokemonTeam = []
@@ -189,23 +192,31 @@ def MovePlayer(Player):
 
 
 
+
+
 def MapPose(Player):
     print("Map")
     print("X", Player.PositionX, "Y", Player.PositionY)
     if Player.PositionX % 5 == 1 :
         print("=----- DUEL -----=")
-        fight(Player)
+        Kid = Fight("Kid", Pokedex[4])
+        Kid.Setup(Player)
+
     else : 
         MovePlayer(Player)
 
 
 
 class Fight:
-    def __init__(self, Player, Openent):
-        self.Player = Player
+    def __init__(self, name , Openent):
+        self.name = name
         self.Openent = Openent
-        
-    def Setup(self):
+
+    def Setup(self, Player):
+        i = 0
+        print(self.name, "want to fight with", self.Openent.name)
+        print(self.Openent.name,"Life:", "#" * self.Openent.life)
+        print("Your :", Player.Pokemon1.name, "Life:", "#" * Player.Pokemon1.life)
         print("Fight")
         print("1 - Attack")
         print("2 - Item")
