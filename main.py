@@ -5,6 +5,7 @@
 
 #Variable Globale
 
+from turtle import speed
 from typing import Set
 
 
@@ -55,27 +56,48 @@ def main():
 
 #Pokemon class
 class Pokemon():
-    def __init__(self, name, level, type, life, id):
+    def __init__(self, name, level, type, life, id, attack, defense, speed, attacks):
         self.name = name
         self.level = level
         self.type = type
         self.life = life
+        self.attack = attack
+        self.defense = defense
+        self.speed = speed
         self.id = id
+        self.attacks = {}
+    
+    def Moves(self , move_1,damage_1,move_2,damage_2): 
+        self.attacks[move_1] = damage_1
+        self.attacks[move_2] = damage_2
+
+
+
 
 
 #Init Pokemon
 
 def InitPokedex():
-    Any = Pokemon("None", 0, "None", 0, 0)
-    Bulbizare = Pokemon("Bulbizarre", 5, "Plante", 100, 1)
-    Herbizare = Pokemon("Herbizarre", 5, "Feu", 100, 2)
-    Florizare = Pokemon("Florizarre", 5, "Eau", 100, 3)
-    Salameche = Pokemon("Salameche", 5, "Fire", 100, 4)
-    Reptincel = Pokemon("Reptincel", 5, "Fire", 100, 5)
-    Dracaufeu = Pokemon("Dracaufeu", 5, "Fire", 100, 6)
-    Carapuce  = Pokemon("Carapuce", 5, "Water", 100, 7)
-    Carabaffe = Pokemon("Carabaffe", 5, "Water", 100, 8)
-    Tortank   = Pokemon("Tortank", 5, "Water", 100, 9)
+    Any = Pokemon("None", 0, "None", 0, 0, 0, 0, 0, 0)
+    Bulbizare = Pokemon("Bulbizarre", 5, "Plante", 100, 1, 13, 9, 5, {})
+    Bulbizare.Moves("Tackle", 10, "Vine Whip", 20)
+    print("Bulbizare", Bulbizare.attacks)
+    Herbizare = Pokemon("Herbizarre", 5, "Feu", 100, 2, 14, 12, 23, {})
+    Herbizare.Moves("Tackle", 10, "Vine Whip", 20)
+    Florizare = Pokemon("Florizarre", 5, "Eau", 100, 3, 12, 13, 23, {})
+    Florizare.Moves("Tackle", 10, "Vine Whip", 20)
+    Salameche = Pokemon("Salameche", 5, "Fire", 100, 4, 14, 13, 12, {})
+    Salameche.Moves("Scratch", 10, "Ember", 20)
+    Reptincel = Pokemon("Reptincel", 5, "Fire", 100, 5, 15, 18, 13, {})
+    Reptincel.Moves("Scratch", 10, "Ember", 20)
+    Dracaufeu = Pokemon("Dracaufeu", 5, "Fire", 100, 6, 34, 21, 12, {})
+    Dracaufeu.Moves("Scratch", 10, "Ember", 20)
+    Carapuce  = Pokemon("Carapuce", 5, "Water", 100, 7, 10, 9, 8, {})
+    Carapuce.Moves("Tackle", 10, "Water Gun", 20)
+    Carabaffe = Pokemon("Carabaffe", 5, "Water", 100, 8, 20, 15, 16, {})
+    Carabaffe.Moves("Tackle", 10, "Water Gun", 20)
+    Tortank   = Pokemon("Tortank", 5, "Water", 100, 9, 50, 30, 15, {})
+    Tortank.Moves("Tackle", 10, "Water Gun", 20)
 
     Pokedex.append(Any)
     Pokedex.append(Bulbizare)
@@ -224,6 +246,10 @@ class Fight:
         choice = input("Choice : ")
         if choice == "1":
             print("Attack")
+            print("1 -", Player.Pokemon1.move)
+            print("2 -", Player.Pokemon1.move)
+            choice = input("Choice : ")
+
         elif choice == "2":
             print("Item")
         elif choice == "3":
