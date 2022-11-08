@@ -43,12 +43,13 @@ def main():
     choise = input("1.Bulbizare / 2.Salamèche / 3.Carapuce")
     if choise == "1" :
         Starter = Pokedex[1]
-    #    print("Vous avez choisis", Starter.name)
-   #     print("Attaque " , Starter.attacks)
+        print("Vous avez choisis", Starter.name)
     if choise == "2":
         Starter = Pokedex[4]
+        print("Vous avez choisis", Starter.name)
     if choise == "3":
         Starter = Pokedex[7]
+        print("Vous avez choisis", Starter.name)
     PositionX = 5
     PositionY = 5
     Player = Dresseur(name, sexe, Starter, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6, PositionX, PositionY)
@@ -266,8 +267,7 @@ class Fight:
         self.Openent = Openent
 
     def Setup(self, Player):
-        i = 0
-        print(self.name, "want to fight with", self.Openent.name)
+
         print(self.Openent.name,"Life:", "#" * self.Openent.life)
         print("Your :", Player.Pokemon1.name, "Life:", "#" * Player.Pokemon1.life)
         print("Fight")
@@ -285,43 +285,47 @@ class Fight:
 
             if Player.Pokemon1.speed > self.Openent.speed:
 
-                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name)
+                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en premier
                 CheckEfficacity = TypeEffectiveness(self.Openent.MoveType(choice) , Player.Pokemon1.type) #changer choice par rando
 
-                life  = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) *  CheckEfficacity
+                life  = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) /  CheckEfficacity
                 life = int(life)
                 Player.Pokemon1.life = life
                 
 
 
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name)
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name) #Adversaire qui attaque
                 CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice), self.Openent.type)
 
-                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) * CheckEfficacity
+                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
                 life = int(life)
                 Player.Pokemon1.life = life
 
 
 
             if Player.Pokemon1.speed < self.Openent.speed:
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name)
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name) #Adversaire qui attaque
                 CheckEfficacity = TypeEffectiveness(self.Openent.type , Player.Pokemon1.type)
 
-                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) *  CheckEfficacity
-                life = int(life)
-                Player.Pokemon1.life = life
+                PlayerLife = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
+                Player.Pokemon1.life = int(PlayerLife)
+
+
 
    
-                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name)
+                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en deuxieme
                 CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice),self.Openent.type ) #changer choice par rando
 
-                life = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) * CheckEfficacity
-                life = int(life)
-                self.Openent.life = life
+                lifeEnn = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) / CheckEfficacity
+                lifeEnn = int(lifeEnn)
+                self.Openent.life = lifeEnn
 
 
             if self.Openent.life <= 0:
                 print("You win")
+                MovePlayer(Player)
+            if Player.Pokemon1.life <= 0:
+                print("You lose")
                 MovePlayer(Player)
             else:
                 self.Setup(Player)
@@ -329,9 +333,11 @@ class Fight:
 
         elif choice == "2":
             print("Item")
+
         elif choice == "3":
 
             print("Run")
+            MovePlayer(Player)
         else:
             print("Error")
             self.Setup()
@@ -342,33 +348,33 @@ class Fight:
 def TypeEffectiveness(Type1, Type2):
     if Type1 == "Fire" and Type2 == "Water": #attaque de type Feu sur pokemon eau
         print("It's not very effective")
-        return 0.5
+        return 1
     elif Type1 == "Fire" and Type2 == "Grass":
         print("It's super effective")
-        return 2
+        return 3
     elif Type1 == "Fire" and Type2 == "Fire":
         print("It's not very effective")
         return 1
     elif Type1 == "Water" and Type2 == "Fire":
         print("It's super effective")
-        return 2
+        return 3
     elif Type1 == "Water" and Type2 == "Grass":
         print("It's not very effective")
-        return 0.5
+        return 1
     elif Type1 == "Water" and Type2 == "Water":
         print("It's not very effective")
         return 1
     elif Type1 == "Grass" and Type2 == "Fire":
         print("It's not very effective")
-        return 0.5
+        return 1
     elif Type1 == "Grass" and Type2 == "Water":
         print("It's super effective")
-        return 2
+        return 3
     elif Type1 == "Grass" and Type2 == "Grass":
         print("It's not very effective")
         return 1
     else:
-        return 1
+        return 2
 
 initGame()
 
