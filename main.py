@@ -7,6 +7,7 @@
 
 from turtle import speed
 from typing import Set
+import json
 
 
 team = 0
@@ -42,8 +43,8 @@ def main():
     choise = input("1.Bulbizare / 2.Salamèche / 3.Carapuce")
     if choise == "1" :
         Starter = Pokedex[1]
-        print("Vous avez choisis", Starter.name)
-        print("Attaque " , Starter.attacks)
+    #    print("Vous avez choisis", Starter.name)
+   #     print("Attaque " , Starter.attacks)
     if choise == "2":
         Starter = Pokedex[4]
     if choise == "3":
@@ -68,40 +69,66 @@ class Pokemon():
         self.id = id
         self.attacks = {}
     
-    def Moves(self ,moveID1 , move_1,damage_1,moveID2,move_2,damage_2): 
-        self.attacks[moveID1] = move_1 ,damage_1
-        self.attacks[moveID2] = move_2, damage_2
+    def Moves(self ,moveID1 , move_1,damage_1,moveID2,move_2,damage_2, type1, type2): 
+        self.attacks[moveID1] = move_1, damage_1, type1
+        self.attacks[moveID2] = move_2, damage_2, type2
 
     def MovesDisplay(self, idnum):
-        print(self.attacks[idnum])
+        if idnum == 1:
+            return self.attacks["name1"]
+        elif idnum == 2:
+            return self.attacks["name2"]
 
+    def MoveDamage(self, idnum):
+        if idnum == 1:
+            return self.attacks["damage1"]
+        elif idnum == 2:
+            return self.attacks["damage2"]
+    
+    def MoveType(self, idnum):
+        if idnum == 1:
+            return self.attacks["type1"]
+        elif idnum == 2:
+            return self.attacks["type2"]
 
-
-
+    def Moves(self, moveID1 , move_1, damage_1, moveID2, move_2, damage_2, type1, type2):
+        self.attacks = {
+         'id1' : moveID1,
+         'name1': move_1,
+         'damage1': damage_1,
+         'type1': type1,
+         'id2' : moveID2,
+         'name2': move_2,
+         'damage2': damage_2,
+         'type2': type2}
+        
+        y = json.dumps(self.attacks)
+        y = json.loads(y)
+       #print(y["name2"])
 
 
 #Init Pokemon
 
 def InitPokedex():
     Any = Pokemon("None", 0, "None", 0, 0, 0, 0, 0, 0)
-    Bulbizare = Pokemon("Bulbizarre", 5, "Plante", 100, 1, 13, 9, 5, {})
-    Bulbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20)
+    Bulbizare = Pokemon("Bulbizarre", 5, "Grass", 100, 1, 13, 9, 5, {})
+    Bulbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
     Herbizare = Pokemon("Herbizarre", 5, "Feu", 100, 2, 14, 12, 23, {})
-    Herbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20)
+    Herbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
     Florizare = Pokemon("Florizarre", 5, "Eau", 100, 3, 12, 13, 23, {})
-    Florizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20)
+    Florizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
     Salameche = Pokemon("Salameche", 5, "Fire", 100, 4, 14, 13, 12, {})
-    Salameche.Moves(1, "Scratch", 10, 2, "Ember", 20)
+    Salameche.Moves(1, "Scratch", 10, 2, "Ember", 20, "Normal", "Fire")
     Reptincel = Pokemon("Reptincel", 5, "Fire", 100, 5, 15, 18, 13, {})
-    Reptincel.Moves(1, "Scratch", 10, 2, "Ember", 20)
+    Reptincel.Moves(1, "Scratch", 10, 2, "Ember", 20, "Normal", "Fire")
     Dracaufeu = Pokemon("Dracaufeu", 5, "Fire", 100, 6, 34, 21, 12, {})
-    Dracaufeu.Moves(1, "Scratch", 10, 2, "Ember", 20)
+    Dracaufeu.Moves(1, "Scratch", 10, 2, "Ember", 20, "Normal", "Fire")
     Carapuce  = Pokemon("Carapuce", 5, "Water", 100, 7, 10, 9, 8, {})
-    Carapuce.Moves(1, "Tackle", 10, 2, "Water Gun", 20)
+    Carapuce.Moves(1, "Tackle", 10, 2, "Water Gun", 20, "Normal", "Water")
     Carabaffe = Pokemon("Carabaffe", 5, "Water", 100, 8, 20, 15, 16, {})
-    Carabaffe.Moves(1, "Tackle", 10, 2, "Water Gun", 20)
+    Carabaffe.Moves(1, "Tackle", 10, 2, "Water Gun", 20, "Normal", "Water")
     Tortank   = Pokemon("Tortank", 5, "Water", 100, 9, 50, 30, 15, {})
-    Tortank.Moves(1, "Tackle", 10, 2, "Water Gun", 20)
+    Tortank.Moves(1, "Tackle", 10, 2, "Water Gun", 20, "Normal", "Water")
 
     Pokedex.append(Any)
     Pokedex.append(Bulbizare)
@@ -253,6 +280,52 @@ class Fight:
             print("1- ", Player.Pokemon1.MovesDisplay(1))
             print("2- ", Player.Pokemon1.MovesDisplay(2))
             choice = input("Choice : ")
+            choice = int(choice)
+    
+
+            if Player.Pokemon1.speed > self.Openent.speed:
+
+                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name)
+                CheckEfficacity = TypeEffectiveness(self.Openent.MoveType(choice) , Player.Pokemon1.type) #changer choice par rando
+
+                life  = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) *  CheckEfficacity
+                life = int(life)
+                Player.Pokemon1.life = life
+                
+
+
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name)
+                CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice), self.Openent.type)
+
+                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) * CheckEfficacity
+                life = int(life)
+                Player.Pokemon1.life = life
+
+
+
+            if Player.Pokemon1.speed < self.Openent.speed:
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name)
+                CheckEfficacity = TypeEffectiveness(self.Openent.type , Player.Pokemon1.type)
+
+                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) *  CheckEfficacity
+                life = int(life)
+                Player.Pokemon1.life = life
+
+   
+                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name)
+                CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice),self.Openent.type ) #changer choice par rando
+
+                life = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) * CheckEfficacity
+                life = int(life)
+                self.Openent.life = life
+
+
+            if self.Openent.life <= 0:
+                print("You win")
+                MovePlayer(Player)
+            else:
+                self.Setup(Player)
+            
 
         elif choice == "2":
             print("Item")
@@ -264,6 +337,38 @@ class Fight:
             self.Setup()
 
 
+
+
+def TypeEffectiveness(Type1, Type2):
+    if Type1 == "Fire" and Type2 == "Water": #attaque de type Feu sur pokemon eau
+        print("It's not very effective")
+        return 0.5
+    elif Type1 == "Fire" and Type2 == "Grass":
+        print("It's super effective")
+        return 2
+    elif Type1 == "Fire" and Type2 == "Fire":
+        print("It's not very effective")
+        return 1
+    elif Type1 == "Water" and Type2 == "Fire":
+        print("It's super effective")
+        return 2
+    elif Type1 == "Water" and Type2 == "Grass":
+        print("It's not very effective")
+        return 0.5
+    elif Type1 == "Water" and Type2 == "Water":
+        print("It's not very effective")
+        return 1
+    elif Type1 == "Grass" and Type2 == "Fire":
+        print("It's not very effective")
+        return 0.5
+    elif Type1 == "Grass" and Type2 == "Water":
+        print("It's super effective")
+        return 2
+    elif Type1 == "Grass" and Type2 == "Grass":
+        print("It's not very effective")
+        return 1
+    else:
+        return 1
 
 initGame()
 
