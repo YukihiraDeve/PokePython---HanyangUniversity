@@ -828,14 +828,24 @@ def MovePlayer(Player):
 def MapPose(Player):
     print("Map")
     print("X", Player.PositionX, "Y", Player.PositionY)
+    randomPokemon = random.randint(1,10)
+    randomSavage = random.randint(1,151)
+    
+
     if Player.PositionX % 5 == 1 :
         print("=----- DUEL -----=")
         Kid = Fight("Kid", Pokedex[4])
+        print("Kid want to fight")
         Kid.Setup(Player)
-    
+    if randomPokemon == 1 or randomPokemon == 5  or randomPokemon == 15 or randomPokemon == 18:
+        print("=----- DUEL -----=")
 
+        Savage = Fight("Savage", Pokedex[randomSavage])
+        print("Savage", Pokedex[randomSavage].name, "appears")
+        Savage.Setup(Player)
     else : 
         MovePlayer(Player)
+    
 
         
 def PokemonStatus(Pokemon):
@@ -855,8 +865,7 @@ class Fight:
 
         PokemonAlly = Player.PokemonDisplay(Player.ID)
         PokemonEnemy = self.Openent
-
-
+        
 
         
 
@@ -972,6 +981,7 @@ class Fight:
                     if check == 2  or check == 4 or check == 8:
                         print("You have catch the pokemon !")
                         Player.TeamAdd(self.Openent)
+                        MovePlayer(Player)
                     self.Setup(Player)
 
                 self.Setup(Player)
