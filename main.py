@@ -8,6 +8,7 @@
 from turtle import speed
 from typing import Set
 import json
+import random
 
 
 team = 0
@@ -31,6 +32,7 @@ def initGame():
 def main():
 
     BagPack = Bag(0,0,0)
+    BagPack.AddPokeball(5)
 
     print("Welcome to the world of Pokemon !")
     sexe = input("What is your sexe ? (M/F) : ")
@@ -112,15 +114,16 @@ class Pokemon():
        #print(y["name2"])
 
 
+    
 #Init Pokemon
 
 def InitPokedex():
     Any = Pokemon("None", 0, "None", 0, 0, 0, 0, 0, 0)
     Bulbizare = Pokemon("Bulbizarre", 5, "Grass", 100, 1, 13, 9, 5, {})
     Bulbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
-    Herbizare = Pokemon("Herbizarre", 5, "Feu", 100, 2, 14, 12, 23, {})
+    Herbizare = Pokemon("Herbizarre", 5, "Grass", 100, 2, 14, 12, 5, {})
     Herbizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
-    Florizare = Pokemon("Florizarre", 5, "Eau", 100, 3, 12, 13, 23, {})
+    Florizare = Pokemon("Florizarre", 5, "Grass", 100, 3, 12, 13, 23, {})
     Florizare.Moves(1, "Tackle", 10, 2, "Vine Whip", 20, "Normal", "Grass")
     Salameche = Pokemon("Salameche", 5, "Fire", 100, 4, 14, 13, 12, {})
     Salameche.Moves(1, "Scratch", 10, 2, "Ember", 20, "Normal", "Fire")
@@ -592,22 +595,44 @@ class Bag():
         self.rappel = rappel
 
     
-    def AddPokeball(self):
-        self.pokeball += 1
+    def AddPokeball(self, number):
+        self.pokeball += number
         print("Vous avez", self.pokeball, "pokeball")
     
-    def AddPotion(self):
-        self.potion += 1
+    def AddPotion(self, number):
+        self.potion += number
         print("Vous avez", self.potion, "potion")
     
-    def AddRappel(self):
-        self.rappel += 1
+    def AddRappel(self, number):
+        self.rappel += number
         print("Vous avez", self.rappel, "rappel")
     
     def Display(self):
         print("Vous avez", self.pokeball, "pokeball")
         print("Vous avez", self.potion, "potion")
         print("Vous avez", self.rappel, "rappel")
+
+    def Use(self, item, Player):
+        if item == 1:
+            self.pokeball -= 1
+            return 1
+        elif item == 2:
+            self.potion -= 1
+            return 2
+
+        elif item == "rappel":
+            self.rappel -= 1
+            print("Vous avez", self.rappel, "rappel")
+            return 3
+    def ItemDisplay(self, choice):
+        if choice == 1:
+            print("pokeball")
+        elif choice == 2:
+            print("potion")
+        elif choice == 3:
+            print("rappel")
+            
+
     
 
 
@@ -652,7 +677,7 @@ class Dresseur:
 
 
 
-    def TeamPokemon(self):
+    def TeamPokemon(self, Player):
         print("Pokemon1:", self.Pokemon["Pokemon1"].name)
         print("Pokemon2:", self.Pokemon["Pokemon2"].name)
         print("Pokemon3:", self.Pokemon["Pokemon3"].name)
@@ -807,6 +832,7 @@ def MapPose(Player):
         print("=----- DUEL -----=")
         Kid = Fight("Kid", Pokedex[4])
         Kid.Setup(Player)
+    
 
     else : 
         MovePlayer(Player)
@@ -829,9 +855,12 @@ class Fight:
 
         PokemonAlly = Player.PokemonDisplay(Player.ID)
         PokemonEnemy = self.Openent
+
+
+
         
 
-        print(self.Openent.name,"Life:", "#" * self.Openent.life)
+        print(PokemonEnemy.name,"Life:", "#" * PokemonEnemy.life)
         print("Your :", PokemonAlly.name , "Life:", "#" * PokemonAlly.life)
         print("Fight")
         print("1 - Attack")
@@ -850,43 +879,74 @@ class Fight:
 
             if PokemonAlly.speed >= self.Openent.speed:
 
-                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en premier
-                CheckEfficacity = TypeEffectiveness(self.Openent.MoveType(choice) , PokemonAlly.type) #changer choice par rando
 
-                life  = (self.Openent.life - PokemonAlly.MoveDamage(choice)) /  CheckEfficacity
+
+                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" , PokemonEnemy.name) #joueur qui attaque en deuxieme
+                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice), PokemonEnemy.type ) #changer choice par rando
+                print(CheckEfficacity)
+
+                lifeEnn = (PokemonEnemy.life - PokemonAlly.MoveDamage(choice)) / CheckEfficacity
+                lifeEnn = int(lifeEnn)
+                PokemonEnemy.life = lifeEnn
+
+
+
+
+            if PokemonEnemy.life <= 0:
+                print("You win")
+                MovePlayer(Player)
+            if PokemonAlly.life <= 0:
+                print("You lose")
+                MovePlayer(Player)
+
+
+                print(PokemonEnemy.name, "use", PokemonEnemy.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
+                CheckEfficacity = TypeEffectiveness(PokemonEnemy.type , PokemonAlly.type)
+                print(CheckEfficacity)
+
+                life = (PokemonAlly.life - PokemonEnemy.MoveDamage(choice)) / CheckEfficacity
                 life = int(life)
                 PokemonAlly.life = life
                 
 
 
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
-                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice), self.Openent.type)
+   
 
-                life  = (PokemonAlly.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
+
+
+            if PokemonAlly.speed < PokemonEnemy.speed:
+                print(PokemonEnemy.name, "use", PokemonEnemy.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
+                CheckEfficacity = TypeEffectiveness(PokemonEnemy.type , PokemonAlly.type)
+                print(CheckEfficacity)
+
+                life = (PokemonAlly.life - PokemonEnemy.MoveDamage(choice)) / CheckEfficacity
                 life = int(life)
                 PokemonAlly.life = life
 
 
 
-            if PokemonAlly.speed < self.Openent.speed:
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
-                CheckEfficacity = TypeEffectiveness(self.Openent.type , PokemonAlly.type)
-
-                PlayerLife = (PokemonAlly.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
-                PokemonAlly.life = int(PlayerLife)
-
+            if PokemonEnemy.life <= 0:
+                print("You win")
+                MovePlayer(Player)
+            if PokemonAlly.life <= 0:
+                print("You lose")
+                MovePlayer(Player)
+                
 
 
    
-                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en deuxieme
-                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice),self.Openent.type ) #changer choice par rando
+                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" , PokemonEnemy.name) #joueur qui attaque en deuxieme
+                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice), PokemonEnemy.type ) #changer choice par rando
+                print(CheckEfficacity)
 
-                lifeEnn = (self.Openent.life - PokemonAlly.MoveDamage(choice)) / CheckEfficacity
+                lifeEnn = (PokemonEnemy.life - PokemonAlly.MoveDamage(choice)) / CheckEfficacity
                 lifeEnn = int(lifeEnn)
-                self.Openent.life = lifeEnn
+                PokemonEnemy.life = lifeEnn
+      
+    
 
 
-            if self.Openent.life <= 0:
+            if PokemonEnemy.life <= 0:
                 print("You win")
                 MovePlayer(Player)
             if PokemonAlly.life <= 0:
@@ -899,6 +959,30 @@ class Fight:
         elif choice == "2":
             print("Item")
             Player.Bag.Display()
+            choice = input("Choice : ")
+            choice = int(choice)
+            Use = Player.Bag.Use(choice, Player)
+            print(Use)
+            if Use == 1:
+                if self.name != "Savage":
+                        print("You can't use this item on this pokemon")
+                if self.name == "Savage":
+                    print("You use", Player.Bag.ItemDisplay(choice), "on", self.Openent.name)
+                    check = random.randint(1,10)
+                    if check == 2  or check == 4 or check == 8:
+                        print("You have catch the pokemon !")
+                        Player.TeamAdd(self.Openent)
+                    self.Setup(Player)
+
+                self.Setup(Player)
+            elif Use == 2:
+                print("temp")
+                #heal
+            elif Use == 3:
+                print("test")
+                #Rappel
+            
+            self.Setup(Player)
 
             
 
@@ -1721,7 +1805,7 @@ def TypeEffectiveness(Type1, Type2):
         return 1
     else:
         print("Error")
-        return 0
+        return 1
 
     
     #type comparais
