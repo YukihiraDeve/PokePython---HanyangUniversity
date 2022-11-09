@@ -29,14 +29,10 @@ def initGame():
 
 
 def main():
-    Pokemon2 = Pokedex[0]
-    Pokemon3 = Pokedex[0]
-    Pokemon4 = Pokedex[0]
-    Pokemon5 = Pokedex[0]
-    Pokemon6 = Pokedex[0]
 
     print("Welcome to the world of Pokemon !")
     sexe = input("What is your sexe ? (M/F) : ")
+    
     name = input("What is your name ?")
     print("Nice to meet you", name )
     print("It's the time for chose your starter")
@@ -50,9 +46,12 @@ def main():
     if choise == "3":
         Starter = Pokedex[7]
         print("Vous avez choisis", Starter.name)
+    else :
+        print("Veuillez choisir un Pokemon")
     PositionX = 5
     PositionY = 5
-    Player = Dresseur(name, sexe, Starter, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6, PositionX, PositionY)
+    Player = Dresseur(name, sexe, Starter, PositionX, PositionY)
+    Player.TeamStarer(Starter)
 
     return Player
 
@@ -69,10 +68,7 @@ class Pokemon():
         self.speed = speed
         self.id = id
         self.attacks = {}
-    
-    def Moves(self ,moveID1 , move_1,damage_1,moveID2,move_2,damage_2, type1, type2): 
-        self.attacks[moveID1] = move_1, damage_1, type1
-        self.attacks[moveID2] = move_2, damage_2, type2
+
 
     def MovesDisplay(self, idnum):
         if idnum == 1:
@@ -147,32 +143,32 @@ def InitPokedex():
 
 
 class Dresseur:
-    def __init__(self, name, sexe, Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6, PositionX, PositionY):
+    def __init__(self, name, sexe, Pokemon, PositionX, PositionY):
         self.name = name
         self.sexe = sexe
-        self.Pokemon1 = Pokemon1
-        self.Pokemon2 = Pokemon2
-        self.Pokemon3 = Pokemon3
-        self.Pokemon4 = Pokemon4
-        self.Pokemon5 = Pokemon5
-        self.Pokemon6 = Pokemon6
+        self.Pokemon = {}
         self.PositionX = PositionX
         self.PositionY = PositionY
 
+    def TeamStarer(self, Pokemon):
+        self.Pokemon = {
+        'Pokemon1' : Pokemon
+        }
 
-    def TeamPokemon(self, Player):
-        print("1.", self.Pokemon1.name)
-        while True:
-            try:
-                print("2.", self.Pokemon2.name)
-                print("3.", self.Pokemon3.name)
-                print("4.", self.Pokemon4.name)
-                print("5.", self.Pokemon5.name)
-                print("6.", self.Pokemon6.name)
 
-                break
-            except ValueError:
-                print("Error team")
+
+    def TeamPokemon(self, Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6):
+        self.Pokemon = {
+         'Pokemon1' : Pokemon1,
+         'Pokemon2' : Pokemon2,
+         'Pokemon3' : Pokemon3,
+         'Pokemon4' : Pokemon4,
+         'Pokemon5' : Pokemon5,
+         'Pokemon6' : Pokemon6}
+        x = json.dumps(self.Pokemon)
+        x = json.loads(x)
+        
+        
         Menu(Player)
 
     def PlayerInfo(self, Player):
@@ -185,6 +181,22 @@ class Dresseur:
                 , "Pokemon5 :", self.Pokemon5.name
                 , "Pokemon6 :", self.Pokemon6.name)
         Menu(Player)
+
+    def PokemonDisplay(self, idnum):
+        if idnum == 1:
+            Pokemon1 = self.Pokemon["Pokemon1"]
+            return Pokemon1
+        elif idnum == 2:
+            return self.Pokemon["Pokemon2"]
+        elif idnum == 3:
+            return self.Pokemon["Pokemon3"]
+        elif idnum == 4:
+            return self.Pokemon["Pokemon4"]
+        elif idnum == 5:
+            return self.Pokemon["Pokemon5"]
+        elif idnum == 6:
+            return self.Pokemon["Pokemon6"]
+        
 
 
 
@@ -267,9 +279,10 @@ class Fight:
         self.Openent = Openent
 
     def Setup(self, Player):
+        PokemonAlly = Player.PokemonDisplay(1)
 
         print(self.Openent.name,"Life:", "#" * self.Openent.life)
-        print("Your :", Player.Pokemon1.name, "Life:", "#" * Player.Pokemon1.life)
+        print("Your :", PokemonAlly.name , "Life:", "#" * PokemonAlly.life)
         print("Fight")
         print("1 - Attack")
         print("2 - Item")
@@ -277,46 +290,46 @@ class Fight:
         choice = input("Choice : ")
         if choice == "1":
             print("Attack")
-            print("1- ", Player.Pokemon1.MovesDisplay(1))
-            print("2- ", Player.Pokemon1.MovesDisplay(2))
+            print("1- ", PokemonAlly.MovesDisplay(1))
+            print("2- ", PokemonAlly.MovesDisplay(2))
             choice = input("Choice : ")
             choice = int(choice)
     
 
-            if Player.Pokemon1.speed > self.Openent.speed:
+            if PokemonAlly.speed >= self.Openent.speed:
 
-                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en premier
-                CheckEfficacity = TypeEffectiveness(self.Openent.MoveType(choice) , Player.Pokemon1.type) #changer choice par rando
+                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en premier
+                CheckEfficacity = TypeEffectiveness(self.Openent.MoveType(choice) , PokemonAlly.type) #changer choice par rando
 
-                life  = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) /  CheckEfficacity
+                life  = (self.Openent.life - PokemonAlly.MoveDamage(choice)) /  CheckEfficacity
                 life = int(life)
-                Player.Pokemon1.life = life
+                PokemonAlly.life = life
                 
 
 
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name) #Adversaire qui attaque
-                CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice), self.Openent.type)
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
+                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice), self.Openent.type)
 
-                life  = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
+                life  = (PokemonAlly.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
                 life = int(life)
-                Player.Pokemon1.life = life
+                PokemonAlly.life = life
 
 
 
-            if Player.Pokemon1.speed < self.Openent.speed:
-                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,Player.Pokemon1.name) #Adversaire qui attaque
-                CheckEfficacity = TypeEffectiveness(self.Openent.type , Player.Pokemon1.type)
+            if PokemonAlly.speed < self.Openent.speed:
+                print(self.Openent.name, "use", self.Openent.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
+                CheckEfficacity = TypeEffectiveness(self.Openent.type , PokemonAlly.type)
 
-                PlayerLife = (Player.Pokemon1.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
-                Player.Pokemon1.life = int(PlayerLife)
+                PlayerLife = (PokemonAlly.life - self.Openent.MoveDamage(choice)) / CheckEfficacity
+                PokemonAlly.life = int(PlayerLife)
 
 
 
    
-                print(Player.Pokemon1.name, "use", Player.Pokemon1.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en deuxieme
-                CheckEfficacity = TypeEffectiveness(Player.Pokemon1.MoveType(choice),self.Openent.type ) #changer choice par rando
+                print(PokemonAlly.name, "use", PokemonAlly.MovesDisplay(choice), "on" ,self.Openent.name) #joueur qui attaque en deuxieme
+                CheckEfficacity = TypeEffectiveness(PokemonAlly.MoveType(choice),self.Openent.type ) #changer choice par rando
 
-                lifeEnn = (self.Openent.life - Player.Pokemon1.MoveDamage(choice)) / CheckEfficacity
+                lifeEnn = (self.Openent.life - PokemonAlly.MoveDamage(choice)) / CheckEfficacity
                 lifeEnn = int(lifeEnn)
                 self.Openent.life = lifeEnn
 
@@ -324,7 +337,7 @@ class Fight:
             if self.Openent.life <= 0:
                 print("You win")
                 MovePlayer(Player)
-            if Player.Pokemon1.life <= 0:
+            if PokemonAlly.life <= 0:
                 print("You lose")
                 MovePlayer(Player)
             else:
