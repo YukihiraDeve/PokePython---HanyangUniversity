@@ -5,8 +5,6 @@
 
 #Variable Globale
 
-from turtle import speed
-from typing import Set
 import json
 import random
 
@@ -16,7 +14,7 @@ Pokedex = []
 PokemonTeam = []
 MAX_POKEMON_TEAM = 6
 MIN_POKEMON_TEAM = 1
-global Player
+#global Player
 
 
 
@@ -43,23 +41,20 @@ def main():
     choise = input("1.Bulbizare / 2.Salamèche / 3.Carapuce")
     if choise == "1" :
         Starter = Pokedex[1]
-        print("Vous avez choisis", Starter.name)
     if choise == "2":
         Starter = Pokedex[4]
-        print("Vous avez choisis", Starter.name)
     if choise == "3":
         Starter = Pokedex[7]
-        print("Vous avez choisis", Starter.name)
     else :
         print("Veuillez choisir un Pokemon")
+
+    print("Vous avez choisis", Starter.name)
     PositionX = 5
     PositionY = 5
 
     Player = Dresseur(name, sexe, Starter, PositionX, PositionY , BagPack)
     
-    Player.TeamStarer(Starter)
-    Player.TeamAdd(Pokedex[2])
- 
+    Player.TeamStarer(Starter) 
 
 
 
@@ -78,6 +73,9 @@ class Pokemon():
         self.speed = speed
         self.id = id
         self.attacks = {}
+
+    def MaxLife(self):
+        return self.life
 
 
     def MovesDisplay(self, idnum):
@@ -597,7 +595,6 @@ class Bag():
     
     def AddPokeball(self, number):
         self.pokeball += number
-        print("Vous avez", self.pokeball, "pokeball")
     
     def AddPotion(self, number):
         self.potion += number
@@ -626,11 +623,11 @@ class Bag():
             return 3
     def ItemDisplay(self, choice):
         if choice == 1:
-            print("pokeball")
+            print("Pokeball")
         elif choice == 2:
-            print("potion")
+            print("Potion")
         elif choice == 3:
-            print("rappel")
+            print("Rappel")
             
 
     
@@ -761,7 +758,7 @@ class Dresseur:
             elif idnum == 7:
                 print("You have no more Pokemon")
                 exit()
-                break
+
 
 
 
@@ -865,6 +862,7 @@ class Fight:
 
         PokemonAlly = Player.PokemonDisplay(Player.ID)
         PokemonEnemy = self.Openent
+
         
 
         
@@ -901,12 +899,12 @@ class Fight:
 
 
 
-            if PokemonEnemy.life <= 0:
-                print("You win")
-                MovePlayer(Player)
-            if PokemonAlly.life <= 0:
-                print("You lose")
-                MovePlayer(Player)
+                if PokemonEnemy.life <= 0:
+                    print("You win")
+                    MovePlayer(Player)
+                if PokemonAlly.life <= 0:
+                    print("You lose")
+                    MovePlayer(Player)
 
 
                 print(PokemonEnemy.name, "use", PokemonEnemy.MovesDisplay(choice), "on" ,PokemonAlly.name) #Adversaire qui attaque
@@ -934,12 +932,12 @@ class Fight:
 
 
 
-            if PokemonEnemy.life <= 0:
-                print("You win")
-                MovePlayer(Player)
-            if PokemonAlly.life <= 0:
-                print("You lose")
-                MovePlayer(Player)
+                if PokemonEnemy.life <= 0:
+                    print("You win")
+                    MovePlayer(Player)
+                if PokemonAlly.life <= 0:
+                    print("You lose")
+                    MovePlayer(Player)
                 
 
 
@@ -955,14 +953,14 @@ class Fight:
     
 
 
-            if PokemonEnemy.life <= 0:
-                print("You win")
-                MovePlayer(Player)
-            if PokemonAlly.life <= 0:
-                print("You lose")
-                MovePlayer(Player)
-            else:
-                self.Setup(Player)
+                if PokemonEnemy.life <= 0:
+                    print("You win")
+                    MovePlayer(Player)
+                if PokemonAlly.life <= 0:
+                    print("You lose")
+                    MovePlayer(Player)
+                else:
+                    self.Setup(Player)
             
 
         elif choice == "2":
