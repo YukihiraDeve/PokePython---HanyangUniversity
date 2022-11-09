@@ -52,6 +52,9 @@ def main():
     PositionY = 5
     Player = Dresseur(name, sexe, Starter, PositionX, PositionY)
     Player.TeamStarer(Starter)
+    Player.TeamAdd(Pokedex[2])
+
+
 
     return Player
 
@@ -151,9 +154,29 @@ class Dresseur:
         self.PositionY = PositionY
 
     def TeamStarer(self, Pokemon):
+        null = Pokedex[0]
         self.Pokemon = {
-        'Pokemon1' : Pokemon
-        }
+        'Pokemon1' : Pokemon,
+        'Pokemon2' : null,
+        'Pokemon3' : null,
+        'Pokemon4' : null,
+        'Pokemon5' : null,
+        'Pokemon6' : null}
+
+        
+    def TeamAdd(self, Pokemon):
+        if self.Pokemon["Pokemon2"].name == "None":
+            self.Pokemon["Pokemon2"] = Pokemon
+        elif self.Pokemon["Pokemon3"].name == "None":
+            self.Pokemon["Pokemon3"] = Pokemon
+        elif self.Pokemon["Pokemon4"].name == "None":
+            self.Pokemon["Pokemon4"] = Pokemon
+        elif self.Pokemon["Pokemon5"].name == "None":
+            self.Pokemon["Pokemon5"] = Pokemon
+        elif self.Pokemon["Pokemon6"].name == "None":
+            self.Pokemon["Pokemon6"] = Pokemon
+        else:
+            print("Votre equipe est pleine")
 
 
 
@@ -167,9 +190,6 @@ class Dresseur:
          'Pokemon6' : Pokemon6}
         x = json.dumps(self.Pokemon)
         x = json.loads(x)
-        
-        
-        Menu(Player)
 
     def PlayerInfo(self, Player):
         print("Name :", self.name
@@ -182,21 +202,65 @@ class Dresseur:
                 , "Pokemon6 :", self.Pokemon6.name)
         Menu(Player)
 
+
+
     def PokemonDisplay(self, idnum):
-        if idnum == 1:
-            Pokemon1 = self.Pokemon["Pokemon1"]
-            return Pokemon1
-        elif idnum == 2:
-            return self.Pokemon["Pokemon2"]
-        elif idnum == 3:
-            return self.Pokemon["Pokemon3"]
-        elif idnum == 4:
-            return self.Pokemon["Pokemon4"]
-        elif idnum == 5:
-            return self.Pokemon["Pokemon5"]
-        elif idnum == 6:
-            return self.Pokemon["Pokemon6"]
-        
+        while True:
+            if idnum == 1:
+                Pokemon1 = self.Pokemon["Pokemon1"]
+
+                Status = PokemonStatus(Pokemon1)
+                if Status == "Alive":
+                    return Pokemon1
+                else: 
+                    idnum = idnum + 1
+
+            elif idnum == 2 :
+                Pokemon2 = self.Pokemon["Pokemon2"]
+                Status = PokemonStatus(Pokemon2)
+                if Status == "Alive" and Pokemon2.name != "None":
+                    return Pokemon2
+                else: 
+                    idnum = idnum + 1
+                
+            elif idnum == 3:
+                Pokemon3 = self.Pokemon["Pokemon3"]
+                Status = PokemonStatus(Pokemon3)
+                if Status == "Alive" and Pokemon2.name != "None":
+                    return Pokemon3
+                else: 
+                    idnum = idnum + 1
+
+            elif idnum == 4:
+                Pokemon4 = self.Pokemon["Pokemon4"]
+                Status = PokemonStatus(Pokemon4)
+                if Status == "Alive" and Pokemon2.name != "None":
+                    return Pokemon4
+                else: 
+                    idnum = idnum + 1
+
+
+
+            elif idnum == 5:
+                Pokemon5 = self.Pokemon["Pokemon5"]
+                Status = PokemonStatus(Pokemon5)
+                if Status == "Alive" and Pokemon2.name != "None":
+                    return Pokemon5
+                else: 
+                    idnum = idnum + 1
+
+
+            elif idnum == 6:
+                Pokemon6 = self.Pokemon["Pokemon6"]
+                Status = PokemonStatus(Pokemon6)
+                if Status == "Alive" and Pokemon2.name != "None":
+                    return Pokemon6
+                else: 
+                    idnum = idnum + 1
+            elif idnum == 7:
+                print("You have no more Pokemon")
+                exit()
+                break
 
 
 
@@ -271,6 +335,13 @@ def MapPose(Player):
     else : 
         MovePlayer(Player)
 
+        
+def PokemonStatus(Pokemon):
+    if Pokemon.life <= 0:
+        return "KO"
+    elif Pokemon.life > 0:
+        return "Alive"
+
 
 
 class Fight:
@@ -279,7 +350,10 @@ class Fight:
         self.Openent = Openent
 
     def Setup(self, Player):
+
         PokemonAlly = Player.PokemonDisplay(1)
+        PokemonEnemy = self.Openent
+        
 
         print(self.Openent.name,"Life:", "#" * self.Openent.life)
         print("Your :", PokemonAlly.name , "Life:", "#" * PokemonAlly.life)
