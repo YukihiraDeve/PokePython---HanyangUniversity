@@ -30,6 +30,8 @@ def initGame():
 
 def main():
 
+    BagPack = Bag(0,0,0)
+
     print("Welcome to the world of Pokemon !")
     sexe = input("What is your sexe ? (M/F) : ")
     
@@ -50,9 +52,12 @@ def main():
         print("Veuillez choisir un Pokemon")
     PositionX = 5
     PositionY = 5
-    Player = Dresseur(name, sexe, Starter, PositionX, PositionY)
+
+    Player = Dresseur(name, sexe, Starter, PositionX, PositionY , BagPack)
+    
     Player.TeamStarer(Starter)
     Player.TeamAdd(Pokedex[2])
+ 
 
 
 
@@ -144,15 +149,45 @@ def InitPokedex():
 
 
 
+class Bag():
+    def __init__(self  ,pokeball , potion , rappel):
+        self.pokeball = pokeball
+        self.potion = potion
+        self.rappel = rappel
+
+    
+    def AddPokeball(self):
+        self.pokeball += 1
+        print("Vous avez", self.pokeball, "pokeball")
+    
+    def AddPotion(self):
+        self.potion += 1
+        print("Vous avez", self.potion, "potion")
+    
+    def AddRappel(self):
+        self.rappel += 1
+        print("Vous avez", self.rappel, "rappel")
+    
+    def Display(self):
+        print("Vous avez", self.pokeball, "pokeball")
+        print("Vous avez", self.potion, "potion")
+        print("Vous avez", self.rappel, "rappel")
+    
+
+
 
 class Dresseur:
-    def __init__(self, name, sexe, Pokemon, PositionX, PositionY, ID = 1):
+    def __init__(self, name, sexe, Pokemon, PositionX, PositionY, Bag ,ID = 1):
         self.name = name
         self.sexe = sexe
         self.Pokemon = {}
         self.PositionX = PositionX
         self.PositionY = PositionY
         self.ID = ID
+        self.Bag = Bag
+
+
+
 
     def TeamStarer(self, Pokemon):
         null = Pokedex[0]
@@ -181,7 +216,7 @@ class Dresseur:
 
 
 
-    def TeamPokemon(self, Player):
+    def TeamPokemon(self):
         print("Pokemon1:", self.Pokemon["Pokemon1"].name)
         print("Pokemon2:", self.Pokemon["Pokemon2"].name)
         print("Pokemon3:", self.Pokemon["Pokemon3"].name)
@@ -192,15 +227,20 @@ class Dresseur:
 
 
     def PlayerInfo(self, Player):
-        print("Name :", self.name
-                , "Sexe :", self.sexe
-                , "Pokemon1 :", self.Pokemon1.name
-                , "Pokemon2 :", self.Pokemon2.name
-                , "Pokemon3 :", self.Pokemon3.name
-                , "Pokemon4 :", self.Pokemon4.name
-                , "Pokemon5 :", self.Pokemon5.name
-                , "Pokemon6 :", self.Pokemon6.name)
+        print("Nom:", self.name)
+        print("Sexe:", self.sexe)
+        print("PositionX:", self.PositionX)
+        print("PositionY:", self.PositionY)
+        print("ID:", self.ID)
+        print("Pokemon1:", self.Pokemon["Pokemon1"].name)
+        print("Pokemon2:", self.Pokemon["Pokemon2"].name)
+        print("Pokemon3:", self.Pokemon["Pokemon3"].name)
+        print("Pokemon4:", self.Pokemon["Pokemon4"].name)
+        print("Pokemon5:", self.Pokemon["Pokemon5"].name)
+        print("Pokemon6:", self.Pokemon["Pokemon6"].name)
         Menu(Player)
+
+
 
 
 
@@ -422,6 +462,8 @@ class Fight:
 
         elif choice == "2":
             print("Item")
+            Player.Bag.Display()
+            
 
         elif choice == "3":
             print("Switch")
