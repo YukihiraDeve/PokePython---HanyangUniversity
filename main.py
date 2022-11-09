@@ -146,12 +146,13 @@ def InitPokedex():
 
 
 class Dresseur:
-    def __init__(self, name, sexe, Pokemon, PositionX, PositionY):
+    def __init__(self, name, sexe, Pokemon, PositionX, PositionY, ID = 1):
         self.name = name
         self.sexe = sexe
         self.Pokemon = {}
         self.PositionX = PositionX
         self.PositionY = PositionY
+        self.ID = ID
 
     def TeamStarer(self, Pokemon):
         null = Pokedex[0]
@@ -180,16 +181,15 @@ class Dresseur:
 
 
 
-    def TeamPokemon(self, Pokemon1, Pokemon2, Pokemon3, Pokemon4, Pokemon5, Pokemon6):
-        self.Pokemon = {
-         'Pokemon1' : Pokemon1,
-         'Pokemon2' : Pokemon2,
-         'Pokemon3' : Pokemon3,
-         'Pokemon4' : Pokemon4,
-         'Pokemon5' : Pokemon5,
-         'Pokemon6' : Pokemon6}
-        x = json.dumps(self.Pokemon)
-        x = json.loads(x)
+    def TeamPokemon(self, Player):
+        print("Pokemon1:", self.Pokemon["Pokemon1"].name)
+        print("Pokemon2:", self.Pokemon["Pokemon2"].name)
+        print("Pokemon3:", self.Pokemon["Pokemon3"].name)
+        print("Pokemon4:", self.Pokemon["Pokemon4"].name)
+        print("Pokemon5:", self.Pokemon["Pokemon5"].name)
+        print("Pokemon6:", self.Pokemon["Pokemon6"].name)
+
+
 
     def PlayerInfo(self, Player):
         print("Name :", self.name
@@ -351,7 +351,7 @@ class Fight:
 
     def Setup(self, Player):
 
-        PokemonAlly = Player.PokemonDisplay(1)
+        PokemonAlly = Player.PokemonDisplay(Player.ID)
         PokemonEnemy = self.Openent
         
 
@@ -360,7 +360,9 @@ class Fight:
         print("Fight")
         print("1 - Attack")
         print("2 - Item")
-        print("3 - Run")
+        print("3 - Switch")
+        print("4 - Run")
+
         choice = input("Choice : ")
         if choice == "1":
             print("Attack")
@@ -422,6 +424,15 @@ class Fight:
             print("Item")
 
         elif choice == "3":
+            print("Switch")
+            Player.TeamPokemon(Player)
+            choice = input("Choice : ")
+            choice = int(choice)
+            Player.ID = choice
+            PokemonAlly = Player.PokemonDisplay(Player.ID)
+            self.Setup(Player)
+
+        elif choice == "4":
 
             print("Run")
             MovePlayer(Player)
